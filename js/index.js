@@ -13,6 +13,7 @@ $(function(){
   let max_length = 3;
   let question_number = 1;
   let question_limit = 3;
+  let done_questions = {};
 
   // 問題
   const MONDAI_LIST = [
@@ -29,11 +30,12 @@ $(function(){
   ];
 
   // 最初の問題の設定
-  changeQuestionWord(0);
+  changeQuestionWord(getQuestionNumber());
 
-  $countSelect.on('change', function (e) {
+  $countSelect.on('change', function(e){
     question_limit = Number($countSelect.val());
-    changeQuestionWord(0);
+    done_questions = {};
+    changeQuestionWord(getQuestionNumber());
   })
 
   $(document).on('keypress', function(e){
@@ -55,10 +57,19 @@ $(function(){
         finish();
         return;
       }
-      changeQuestionWord(question_number);
+      changeQuestionWord(getQuestionNumber());
       char_index = 1; // 初期化
     }
   });
+
+  function getQuestionNumber() {
+    let random_number = Math.floor(Math.random() * 10);
+    while (done_questions[random_number] !== undefined) {
+      random_number = Math.floor(Math.random() * 10);
+    }
+    done_questions[random_number] = random_number;
+    return random_number;
+  }
 
   function finish() {
     $finishPanel.removeClass('hidden');
