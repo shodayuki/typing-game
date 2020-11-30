@@ -3,13 +3,15 @@ $(function(){
   // jQueryオブジェクトを変数に代入
   const $yomi = $('#yomi');
   const $mondai = $('#mondai');
+  const $finishPanel = $('#finish-panel');
 
   // 問題用の変数の初期化
   let char_index = 1;
 
   // TODO 最初の問題
   let max_length = 3;
-  let question_number = 1;
+  let question_number = 0;
+  let question_limit = 3;
 
   // 問題
   const MONDAI_LIST = [
@@ -35,12 +37,21 @@ $(function(){
     }
 
     if (max_length < char_index) {
-      changeQuestionWord();
-      char_index = 1;
-      // 次の問題を用意
       question_number++;
+      if (question_limit < question_number) {
+        finish();
+        return;
+      }
+      changeQuestionWord();
+      char_index = 1; // 初期化
     }
   });
+
+  function finish() {
+    $finishPanel.removeClass('hidden');
+    $yomi.hide();
+    $mondai.hide();
+  }
 
   // 次の問題の実装
   function changeQuestionWord() {
